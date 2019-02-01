@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{c112c26d-ae73-4ccf-b0a2-28f234ac9c68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{64a54c64-47cc-43c3-9489-71352ef4c0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Rigidbody">
+      <UniqueIdentifier>{8078e8ae-dacf-4e12-9585-6363a59ad844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact">
+      <UniqueIdentifier>{1b964cf0-a4f9-4097-adc0-1664db974018}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gmtl\AABox.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\AABoxOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\AxisAngle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\AxisAngleOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Comparitors.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Config.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Containment.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Coord.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\CoordOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Defines.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\EulerAngle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\EulerAngleOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\External\OpenSGConvert.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Fit\GaussPointsFit.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Frustum.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\FrustumOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Generate.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\gmtl.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Helpers.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Intersection.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\LineSeg.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\LineSegOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\MatrixOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Misc\MatrixConvert.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Numerics\Eigen.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\OOBox.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Output.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\ParametricCurve.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Plane.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\PlaneOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Point.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Quat.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\QuatOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Ray.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\RayOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Sphere.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\SphereOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Tri.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\TriOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Util\Assert.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Util\Meta.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Util\StaticAssert.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Vec.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\VecBase.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\VecExprMeta.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\VecOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\VecOpsMeta.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Version.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="gmtl\Xforms.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsAPI.h" />
+    <ClInclude Include="Physics\Rigidbody\Rigidbody.h">
+      <Filter>Physics\Rigidbody</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PhysicsAPI.cpp" />
+    <ClCompile Include="Physics\Rigidbody\Rigidbody.cpp">
+      <Filter>Physics\Rigidbody</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

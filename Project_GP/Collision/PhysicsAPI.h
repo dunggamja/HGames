@@ -22,6 +22,7 @@
 #include <mutex>
 #include <ppl.h>
 #include <cmath>
+#include <limits>
 
 //========================================================================
 // Math Lib - GMTL (Graphics Math Template Library)
@@ -31,5 +32,15 @@
 #include <gmtl/gmtl.h>
 
 
+//========================================================================
+// BASE
+//========================================================================
+#include "Base/Define.h"
+#include "Base/Singleton.h"
+#include "Base/MathHelper.h"
+
+
 #include "Physics/Rigidbody/Rigidbody.h"
+#include "Physics/Contact/Contact.h"
+#include "Physics/PhysicsManager.h"
 

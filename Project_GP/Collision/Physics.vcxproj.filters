@@ -13,6 +13,9 @@
     <Filter Include="Physics\Contact">
       <UniqueIdentifier>{1b964cf0-a4f9-4097-adc0-1664db974018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{b7b5aabe-f558-4b7a-a243-59f072cbff6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gmtl\AABox.h">
@@ -172,11 +175,32 @@
     <ClInclude Include="Physics\Rigidbody\Rigidbody.h">
       <Filter>Physics\Rigidbody</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysicsManager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Singleton.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Contact\Contact.h">
+      <Filter>Physics\Contact</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Define.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MathHelper.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsAPI.cpp" />
     <ClCompile Include="Physics\Rigidbody\Rigidbody.cpp">
       <Filter>Physics\Rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsManager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\Contact.cpp">
+      <Filter>Physics\Contact</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

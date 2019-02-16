@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\PCH.cpp" />
+    <ClCompile Include="Source\Field\Field.cpp" />
+    <ClCompile Include="Source\Element\Element.cpp" />
+    <ClCompile Include="Source\GameObject\GameObject.cpp" />
+    <ClCompile Include="Source\Base\WellRand.cpp" />
+    <ClCompile Include="Source\Scene\SceneBase.cpp" />
+    <ClCompile Include="Source\Scene\SceneGame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\PCH.h" />
+    <ClInclude Include="Source\Field\Field.h" />
+    <ClInclude Include="Source\Element\Element.h" />
+    <ClInclude Include="Source\GameObject\GameObject.h" />
+    <ClInclude Include="Source\Base\GameEnumDef.h" />
+    <ClInclude Include="Source\Base\PreCompiler.h" />
+    <ClInclude Include="Source\Base\CodeTypeDef.h" />
+    <ClInclude Include="Source\Base\Triger.h" />
+    <ClInclude Include="Source\Base\WellRand.h" />
+    <ClInclude Include="Source\Scene\SceneBase.h" />
+    <ClInclude Include="Source\Base\instance.h" />
+    <ClInclude Include="Source\Scene\SceneGame.h" />
+  </ItemGroup>
+</Project>

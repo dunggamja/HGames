@@ -8,6 +8,7 @@
 #define PHYSICS_DLL 
 #endif
 
+
 //==========================================================
 // DEFINE INTGER 
 //==========================================================
@@ -49,6 +50,11 @@ const SByte	SBYTE_MIN_VALUE = std::numeric_limits<SByte>::min();
 
 const Byte  BYTE_MAX_VALUE = std::numeric_limits<Byte>::max();
 const Byte	BYTE_MIN_VALUE = std::numeric_limits<Byte>::min();
+
+//==========================================================
+// 실수 허용 오차범위
+//==========================================================
+const float F_EPSILON = std::numeric_limits<float>::epsilon();
 
 
 //==========================================================

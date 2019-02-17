@@ -31,6 +31,9 @@
     <Filter Include="Physics\Space">
       <UniqueIdentifier>{9538235f-aafb-4bca-9e8c-33e98e2bfc55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics\Collide">
+      <UniqueIdentifier>{7b7c75fd-a1a9-411c-ac0a-1df6a2f93d06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gmtl\AABox.h">
@@ -211,11 +214,14 @@
     <ClInclude Include="Base\BaseObject.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\Container\RigidbodyManager.h">
-      <Filter>Physics\Container</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\Space\Grid.h">
       <Filter>Physics\Space</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collide\Collide.h">
+      <Filter>Physics\Collide</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\PreCompiler.h">
+      <Filter>Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="Physics\Space\Grid.cpp">
       <Filter>Physics\Space</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collide\Collide.cpp">
+      <Filter>Physics\Collide</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

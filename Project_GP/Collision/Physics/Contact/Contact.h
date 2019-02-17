@@ -1,8 +1,9 @@
 #pragma once
 
-class Contact : public BaseObject
+class Contact : std::enable_shared_from_this<Contact>
 {
 	SHARED_TYPEDEF(Contact)
+
 private:
 	//===============================================
 	// Ãæµ¹ÇÑ Rigidbody

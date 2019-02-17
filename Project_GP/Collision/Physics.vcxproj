@@ -125,6 +125,7 @@
     <ClInclude Include="Base\BaseObject.h" />
     <ClInclude Include="Base\Define.h" />
     <ClInclude Include="Base\MathHelper.h" />
+    <ClInclude Include="Base\PreCompiler.h" />
     <ClInclude Include="Base\Singleton.h" />
     <ClInclude Include="PhysicsAPI.h" />
     <ClInclude Include="gmtl\AABox.h" />
@@ -178,9 +179,9 @@
     <ClInclude Include="gmtl\VecOpsMeta.h" />
     <ClInclude Include="gmtl\Version.h" />
     <ClInclude Include="gmtl\Xforms.h" />
+    <ClInclude Include="Physics\Collide\Collide.h" />
     <ClInclude Include="Physics\Contact\Contact.h" />
     <ClInclude Include="Physics\Contact\ContactResolver.h" />
-    <ClInclude Include="Physics\Container\RigidbodyManager.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Physics\Rigidbody\Rigidbody.h" />
     <ClInclude Include="Physics\Space\Grid.h" />
@@ -190,6 +191,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Physics\Collide\Collide.cpp" />
     <ClCompile Include="Physics\Contact\Contact.cpp" />
     <ClCompile Include="Physics\Contact\ContactResolver.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />

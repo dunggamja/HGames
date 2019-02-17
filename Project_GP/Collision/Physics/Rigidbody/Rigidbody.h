@@ -47,6 +47,12 @@ protected:
 	gmtl::Vec3f m_ForceAccum;		
 	gmtl::Vec3f m_TorqueAccum;		
 
+
+	//==================================================
+	// �浹ü
+	//==================================================
+	Collide::UniquePtr	m_Collide = nullptr;
+
 public:
 	void AddForceAtLocalPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point);
 	void AddForceAtWorldPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point);

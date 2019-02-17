@@ -23,4 +23,16 @@ namespace gmtl
 		return quat;
 	}
 
+	template<typename T>
+	bool	IsPlaneContainPoint(const Vec<T, 3>& point, const Vec<T, 3>& planeDir, const Vec<T, 3>& planePoint)
+	{
+		float result = 0.f;
+		for (int i = 0; i < 3; ++i)
+		{
+			result += planeDir[i] * (point[i] - planePoint[i]);
+		}
+
+		return std::fabsf(result) <= F_EPSILON;
+	}
+
 };

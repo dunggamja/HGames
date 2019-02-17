@@ -16,6 +16,21 @@
     <Filter Include="Base">
       <UniqueIdentifier>{b7b5aabe-f558-4b7a-a243-59f072cbff6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics\Contact\Detector">
+      <UniqueIdentifier>{0cde10d0-2897-44ee-ae9b-e818289c4b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Detector\Broad">
+      <UniqueIdentifier>{a673e095-cbec-43a9-875f-5bd7d426622f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Detector\Narrow">
+      <UniqueIdentifier>{b47bb5ee-3f08-4a96-996d-7da8ac8f648a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Container">
+      <UniqueIdentifier>{59e8b14d-5ec8-4eb0-b89d-c414afc3a228}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Space">
+      <UniqueIdentifier>{9538235f-aafb-4bca-9e8c-33e98e2bfc55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gmtl\AABox.h">
@@ -190,6 +205,18 @@
     <ClInclude Include="Base\MathHelper.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Contact\ContactResolver.h">
+      <Filter>Physics\Contact</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\BaseObject.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Container\RigidbodyManager.h">
+      <Filter>Physics\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Space\Grid.h">
+      <Filter>Physics\Space</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsAPI.cpp" />
@@ -201,6 +228,12 @@
     </ClCompile>
     <ClCompile Include="Physics\Contact\Contact.cpp">
       <Filter>Physics\Contact</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\ContactResolver.cpp">
+      <Filter>Physics\Contact</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Space\Grid.cpp">
+      <Filter>Physics\Space</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

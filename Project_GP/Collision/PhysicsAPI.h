@@ -38,9 +38,17 @@
 #include "Base/Define.h"
 #include "Base/Singleton.h"
 #include "Base/MathHelper.h"
+#include "Base/BaseObject.h"
 
 
+
+//========================================================================
+// PHYSICS
+//========================================================================
 #include "Physics/Rigidbody/Rigidbody.h"
 #include "Physics/Contact/Contact.h"
+#include "Physics/Contact/ContactResolver.h"
+#include "Physics/Container/RigidbodyManager.h"
+#include "Physics/Space/Grid.h"
 #include "Physics/PhysicsManager.h"
 

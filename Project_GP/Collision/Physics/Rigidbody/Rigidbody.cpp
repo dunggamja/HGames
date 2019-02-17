@@ -12,7 +12,13 @@
 //====================================================
 void Rigidbody::AddForceAtLocalPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point)
 {
+	//=====================================
+	// 월드 좌표계로 변환해서 계산합니다. 
+	//=====================================
+	auto worldForce = m_Rotation * force;
+	auto worldPoint = m_Matrix * point;
 
+	AddForceAtWorldPoint(worldForce, worldPoint);
 }
 
 //====================================================
@@ -33,29 +39,29 @@ void Rigidbody::AddForceAtWorldPoint(const gmtl::Vec3f& force, const gmtl::Vec3f
 	m_TorqueAccum += rot;
 }
 
-void Rigidbody::Update(float deltaTime)
+void Rigidbody::Update(float timeDelta)
 {
 	//=====================================================
 	// 속도 계산.
 	//=====================================================
-	auto accel			= m_ForceAccum * deltaTime;
+	auto accel			= m_InverseMass * m_ForceAccum ;
 	auto angularAccel	= m_InverseTensorWorld * m_TorqueAccum;
 
-	m_Velocity			+= accel;
-	m_AngularVelocity	+= angularAccel * deltaTime;
+	m_Velocity			+= accel * timeDelta;
+	m_AngularVelocity	+= angularAccel * timeDelta;
 
 	//=====================================================
 	// 마찰력(감쇠) 적용.
 	//=====================================================
-	m_Velocity			*= std::powf(1.f - m_Drag, deltaTime);
-	m_AngularVelocity	*= std::powf(1.f - m_Drag, deltaTime);
+	m_Velocity			*= std::powf(1.f - m_Drag, timeDelta);
+	m_AngularVelocity	*= std::powf(1.f - m_Drag, timeDelta);
 
 
 	//=====================================================
 	// 위치 & 회전 변경
 	//=====================================================
-	m_Position += m_Velocity * deltaTime;
-	m_Rotation = gmtl::AddAngularVectorQuat(m_Rotation, m_AngularVelocity, deltaTime);
+	m_Position += m_Velocity * timeDelta;
+	m_Rotation = gmtl::AddAngularVectorQuat(m_Rotation, m_AngularVelocity, timeDelta);
 
 
 	//=====================================================

@@ -1,14 +1,16 @@
 #pragma once
 
-class Rigidbody
+class Rigidbody : public BaseObject
 {
+	SHARED_TYPEDEF(Rigidbody)
+
 protected:
 	//==================================================
 	// 위치, 회전 값.
 	//==================================================
-	gmtl::Vec3f m_Position;			
-	gmtl::Quatf m_Rotation;			
-
+	gmtl::Vec3f			m_Position;			
+	gmtl::Quatf			m_Rotation = gmtl::QUAT_IDENTITYF;			
+	gmtl::Matrix44f		m_Matrix = gmtl::MAT_IDENTITY44F;
 
 	//==================================================
 	// 위치 관련 속도, 가속도
@@ -49,7 +51,7 @@ public:
 	void AddForceAtLocalPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point);
 	void AddForceAtWorldPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point);
 
-	void Update(float deltaTime); 
+	void Update(float timeDelta);
 
 private:
 

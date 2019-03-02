@@ -35,4 +35,16 @@ namespace gmtl
 		return std::fabsf(result) <= F_EPSILON;
 	}
 
+	template<typename T>
+	T		PointLocationByPlane(const Vec<T, 3>& point, const Vec<T, 3>& planeDir, const Vec<T, 3>& planePoint)
+	{
+		//==========================================
+		// 포인트가 평면의 어느 방향에 있는지 검사합니다.
+		//  + : 평면방향 , - : 평면의 반대방향, 0 : 평면
+		//==========================================
+
+		gmtl::Vec<T, 3> dir = point - planePoint;  gmtl::normalize(dir);
+		return gmtl::dot(dir, planeDir);
+	}
+
 };

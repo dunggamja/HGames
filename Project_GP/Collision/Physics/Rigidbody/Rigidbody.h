@@ -51,7 +51,7 @@ protected:
 	//==================================================
 	// �浹ü
 	//==================================================
-	Collide::UniquePtr	m_Collide = nullptr;
+	Collider::UniquePtr	m_Collide = nullptr;
 
 public:
 	void AddForceAtLocalPoint(const gmtl::Vec3f& force, const gmtl::Vec3f& point);

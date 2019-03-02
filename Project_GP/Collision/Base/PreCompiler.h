@@ -2,7 +2,7 @@
 
 class Contact;
 class ContactResolver;
-class Collide;
+class Collider;
 class Rigidbody;
 class Cell;
 class Grid;

@@ -36,6 +36,7 @@
 // BASE
 //========================================================================
 #include "Base/Define.h"
+#include "Base/Const.h"
 #include "Base/Singleton.h"
 #include "Base/MathHelper.h"
 #include "Base/PreCompiler.h"
@@ -46,7 +47,8 @@
 //========================================================================
 // PHYSICS
 //========================================================================
-#include "Physics/Collide/Collide.h"
+#include "Physics/Collide/Collider.h"
+#include "Physics/Collide/BoxCollider.h"
 #include "Physics/Rigidbody/Rigidbody.h"
 #include "Physics/Contact/Contact.h"
 #include "Physics/Contact/ContactResolver.h"

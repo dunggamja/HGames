@@ -7,7 +7,7 @@ class AABBBoxCollider : public Collider
 public:
 	AABBBoxCollider(gmtl::Vec3f centerPosition, gmtl::Vec3f size);
 public:
-	virtual gmtl::Vec3f	GetSupportPoint(gmtl::Vec3f dir) const override;
+	virtual gmtl::Vec3f	GetFurthestPoint(gmtl::Vec3f dir) const override;
 
 protected:
 	void	InitializePoints();

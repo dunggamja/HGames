@@ -7,7 +7,7 @@ int main()
 	gmtl::Vec3f sizeA(1.f, 1.f, 1.f);
 	auto boxA = std::make_shared<AABBBoxCollider>(centerA, sizeA);
 
-	gmtl::Vec3f centerB(0.5f, 0.f, 0.f);
+	gmtl::Vec3f centerB(0.0f, 0.1f, 0.f);
 	gmtl::Vec3f sizeB(1.f, 1.f, 1.f);
 	auto boxB = std::make_shared<AABBBoxCollider>(centerB, sizeB);
 

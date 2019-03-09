@@ -6,12 +6,12 @@ const float Collider::EPA_TOLERANCE				= 0.0001f;
 const Int32 Collider::EPA_MAX_NUM_LOOSE_EDGES	= 32;
 const Int32 Collider::EPA_MAX_NUM_FACES			= 64;
 
-gmtl::Vec3f Collider::GetSupportPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir)
+gmtl::Vec3f Collider::GetFurthestPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir)
 {
 	if (nullptr == A || nullptr == B) return gmtl::Vec3f(0.f, 0.f, 0.f);
 
-	auto P1 = A->GetSupportPoint(dir);
-	auto P2 = B->GetSupportPoint(-dir);
+	auto P1 = A->GetFurthestPoint(dir);
+	auto P2 = B->GetFurthestPoint(-dir);
 	return P1 - P2;
 }
 
@@ -43,11 +43,11 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 	//=========================================================
 	// 초기 Simplex 포인트들을 셋팅합니다. 
 	//=========================================================
-	C = GetSupportPoint(setA, setB, dir);
+	C = GetFurthestPoint(setA, setB, dir);
 	
 	dir = -dir;
 	
-	B = GetSupportPoint(setA, setB, dir);
+	B = GetFurthestPoint(setA, setB, dir);
 
 	//=========================================================
 	// 이 경우 충돌하지 않는 것 입니다. 
@@ -68,7 +68,7 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 	//=========================================================
 	for(Int32 iteration = 0; iteration < GJK_MAX_ITER_NUM; ++iteration)
 	{
-		A = GetSupportPoint(setA, setB, dir);
+		A = GetFurthestPoint(setA, setB, dir);
 
 		//=========================================================
 		// 이 경우 충돌하지 않는 것 입니다. 
@@ -413,6 +413,7 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 	//==================================================
 	// EPA 알고리즘을 통해 충돌 정보를 계산합니다. 
 	// Ref : https://www.youtube.com/watch?v=6rgiPrzqt9w
+	//		 http://hacktank.net/blog/?p=119
 	//==================================================ㅍ
 	const auto& A = simplexPoints[0];
 	const auto& B = simplexPoints[1];
@@ -522,7 +523,7 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 				closestFace = arrayFaces[faceIdx];
 		}
 		
-		auto point = GetSupportPoint(setA, setB, closestFace.Normal);
+		auto point = GetFurthestPoint(setA, setB, closestFace.Normal);
 
 		//===============================================
 		// 새로 얻은 점이 기존의 점과 거의 차이가 나지 않는다.

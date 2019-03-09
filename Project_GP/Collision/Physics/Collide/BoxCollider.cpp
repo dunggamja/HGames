@@ -24,7 +24,7 @@ void	AABBBoxCollider::InitializePoints()
 	m_Points[7] = gmtl::Vec3f(maxPoint[0], maxPoint[1], maxPoint[2]);
 }
 
-gmtl::Vec3f	AABBBoxCollider::GetSupportPoint(gmtl::Vec3f dir) const
+gmtl::Vec3f	AABBBoxCollider::GetFurthestPoint(gmtl::Vec3f dir) const
 {
 	float			maxDotValue		= gmtl::dot(dir, m_Points[0]);
 	gmtl::Vec3f		supportPoint	= m_Points[0];

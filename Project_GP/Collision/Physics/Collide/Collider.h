@@ -22,7 +22,7 @@ public:
 // 충돌 체크를 위한 함수 입니다. 
 //======================================================================================================
 public:
-	static gmtl::Vec3f									GetSupportPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir);
+	static gmtl::Vec3f									GetFurthestPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir);
 	static std::tuple<bool, std::array<gmtl::Vec3f, 4>>	CheckGJK(const Collider::SharedPtr A, const Collider::SharedPtr B);
 	static bool											ContainsOrigin(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& dir, int& simplexCount);
 	static bool											Triangle(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& dir, int& simplexCount);
@@ -34,7 +34,7 @@ protected:
 	//================================================================
 	// 충돌체에서 해당 방향으로 가장 돌출되어 있는 점을 가져옵니다.
 	//================================================================
-	virtual gmtl::Vec3f	GetSupportPoint(gmtl::Vec3f dir) const = 0;
+	virtual gmtl::Vec3f	GetFurthestPoint(gmtl::Vec3f dir) const = 0;
 
 protected:
 	static const Int32 GJK_MAX_ITER_NUM;

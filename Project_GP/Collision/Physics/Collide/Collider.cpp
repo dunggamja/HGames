@@ -2,21 +2,27 @@
 
 const Int32 Collider::GJK_MAX_ITER_NUM			= 64;
 const Int32 Collider::EPA_MAX_ITER_NUM			= 64;
-const float Collider::EPA_TOLERANCE				= 0.0001f;
 const Int32 Collider::EPA_MAX_NUM_LOOSE_EDGES	= 32;
 const Int32 Collider::EPA_MAX_NUM_FACES			= 64;
+const float Collider::FLOAT_TOLERANCE			= 0.0001f;
 
-gmtl::Vec3f Collider::GetFurthestPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir)
+Simplex Collider::GetSupportPoint(const Collider::SharedPtr A, const Collider::SharedPtr B, gmtl::Vec3f& dir)
 {
-	if (nullptr == A || nullptr == B) return gmtl::Vec3f(0.f, 0.f, 0.f);
+	Simplex simplex;
+	if (nullptr == A || nullptr == B) return simplex;
 
 	auto P1 = A->GetFurthestPoint(dir);
 	auto P2 = B->GetFurthestPoint(-dir);
-	return P1 - P2;
+
+	simplex.m_Point				= P1 - P2;
+	simplex.m_OriginPoint[0]	= P1;
+	simplex.m_OriginPoint[1]	= P2;
+
+	return simplex;
 }
 
 
-std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::SharedPtr setA, const Collider::SharedPtr setB)
+std::tuple<bool, SimplexArray> Collider::CheckGJK(const Collider::SharedPtr setA, const Collider::SharedPtr setB)
 {
 	//========================================================
 	// 충돌 검출에 필요한 점들을 저장합니다. 
@@ -25,13 +31,15 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 	//  Ref : http://vec3.ca/gjk/implementation/
 	//      : http://in2gpu.com/2014/05/18/gjk-algorithm-3d/
 	//========================================================
-	std::array<gmtl::Vec3f, 4> simplexPoints;
-	auto& A = simplexPoints[0];
-	auto& B = simplexPoints[1];
-	auto& C = simplexPoints[2];
-	auto& D = simplexPoints[3];
+	SimplexArray	simplexPoints;
+	auto& A = simplexPoints.m_Simplex[0];
+	auto& B = simplexPoints.m_Simplex[1];
+	auto& C = simplexPoints.m_Simplex[2];
+	auto& D = simplexPoints.m_Simplex[3];
 
-	int simplexCount = 2;
+	auto& simplexCount = simplexPoints.m_Count;
+
+	simplexCount = 2;
 
 	if (nullptr == setA || nullptr == setB)
 		return std::make_tuple(false, simplexPoints);
@@ -43,22 +51,22 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 	//=========================================================
 	// 초기 Simplex 포인트들을 셋팅합니다. 
 	//=========================================================
-	C = GetFurthestPoint(setA, setB, dir);
+	C = GetSupportPoint(setA, setB, dir);
 	
 	dir = -dir;
 	
-	B = GetFurthestPoint(setA, setB, dir);
+	B = GetSupportPoint(setA, setB, dir);
 
 	//=========================================================
 	// 이 경우 충돌하지 않는 것 입니다. 
 	//=========================================================
-	if (gmtl::dot(B, dir) < 0.f)
+	if (gmtl::dot(B.m_Point, dir) < 0.f)
 	{
 		return std::make_tuple(false, simplexPoints);
 	}
 
-	gmtl::Vec3f BC = C - B;
-	gmtl::Vec3f BO = -B;
+	gmtl::Vec3f BC = C.m_Point - B.m_Point;
+	gmtl::Vec3f BO = -B.m_Point;
 	gmtl::cross(dir, BC, BO);
 	gmtl::cross(dir, dir, BC);
 
@@ -68,16 +76,16 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 	//=========================================================
 	for(Int32 iteration = 0; iteration < GJK_MAX_ITER_NUM; ++iteration)
 	{
-		A = GetFurthestPoint(setA, setB, dir);
+		A = GetSupportPoint(setA, setB, dir);
 
 		//=========================================================
 		// 이 경우 충돌하지 않는 것 입니다. 
 		//=========================================================
-		if (gmtl::dot(A, dir) < 0.f)
+		if (gmtl::dot(A.m_Point, dir) < 0.f)
 		{
 			return std::make_tuple(false, simplexPoints);
 		}
-		else if(ContainsOrigin(simplexPoints, dir, simplexCount))
+		else if(ContainsOrigin(simplexPoints, dir))
 		{
 			return  std::make_tuple(true, simplexPoints);
 		}
@@ -87,26 +95,26 @@ std::tuple<bool, std::array<gmtl::Vec3f, 4>> Collider::CheckGJK(const Collider::
 }
 
 
-bool	Collider::ContainsOrigin(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& dir, int& simplexCount)
+bool	Collider::ContainsOrigin(SimplexArray& simplexArray, gmtl::Vec3f& dir)
 {
-	switch(simplexCount)
+	switch(simplexArray.m_Count)
 	{
-	case 2: return Triangle(simplexPoints, dir, simplexCount);
-	case 3: return Pyramid(simplexPoints, dir, simplexCount);
+	case 2: return Triangle(simplexArray, dir);
+	case 3: return Pyramid(simplexArray, dir);
 	}
 	return false;
 }
 
-bool	Collider::Triangle(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& dir, int& simplexCount)
+bool	Collider::Triangle(SimplexArray& simplexArray, gmtl::Vec3f& dir)
 {
-	auto& A = simplexPoints[0];
-	auto& B = simplexPoints[1];
-	auto& C = simplexPoints[2];
-	auto& D = simplexPoints[3];
+	auto& A = simplexArray.m_Simplex[0];
+	auto& B = simplexArray.m_Simplex[1];
+	auto& C = simplexArray.m_Simplex[2];
+	auto& D = simplexArray.m_Simplex[3];
 
-	gmtl::Vec3f AO = -A;
-	gmtl::Vec3f AB = B - A;
-	gmtl::Vec3f AC = C - A;
+	gmtl::Vec3f AO = -A.m_Point;
+	gmtl::Vec3f AB = B.m_Point - A.m_Point;
+	gmtl::Vec3f AC = C.m_Point - A.m_Point;
 
 	gmtl::Vec3f ABC;
 	gmtl::cross(ABC, AB, AC);
@@ -166,22 +174,22 @@ bool	Collider::Triangle(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& 
 		dir = -ABC;
 	}
 
-	simplexCount = 3;
+	simplexArray.m_Count = 3;
 
 	return false;
 }
 
-bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& dir, int& simplexCount)
+bool	Collider::Pyramid(SimplexArray& simplexArray, gmtl::Vec3f& dir)
 {
-	auto& A = simplexPoints[0];
-	auto& B = simplexPoints[1];
-	auto& C = simplexPoints[2];
-	auto& D = simplexPoints[3];
+	auto& A = simplexArray.m_Simplex[0];
+	auto& B = simplexArray.m_Simplex[1];
+	auto& C = simplexArray.m_Simplex[2];
+	auto& D = simplexArray.m_Simplex[3];
 
-	gmtl::Vec3f AO = -A;
-	gmtl::Vec3f AB = B - A;
-	gmtl::Vec3f AC = C - A;
-	gmtl::Vec3f AD = D - A;
+	gmtl::Vec3f AO = -A.m_Point;
+	gmtl::Vec3f AB = B.m_Point - A.m_Point;
+	gmtl::Vec3f AC = C.m_Point - A.m_Point;
+	gmtl::Vec3f AD = D.m_Point - A.m_Point;
 
 	gmtl::Vec3f ABC;
 	gmtl::Vec3f ACD;
@@ -259,17 +267,18 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 	case overACD | overADB:
 	{
 		//rotate ACD, ADB into ABC, ACD
-		gmtl::Vec3f TMP;
+		Simplex TMP;
 		
 		TMP = B;
 		B	= C;
 		C	= D;
 		D	= TMP;
 
-		TMP = AB;
+		auto EDGE = AB;
+
 		AB	= AC;
 		AC	= AD;
-		AD	= TMP;
+		AD	= EDGE;
 
 		ABC = ACD;
 		ACD = ADB;
@@ -280,20 +289,22 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 	case overABC | overADB:
 	{
 		//rotate ADB, ABC into ABC, ACD
-		gmtl::Vec3f TMP;
+
+		Simplex TMP;
 
 		TMP = C;
-		C	= B;
-		B	= D;
-		D	= TMP;
+		C = B;
+		B = D;
+		D = TMP;
 
-		TMP = AC;
-		AC	= AB;
-		AB	= AD;
-		AD	= TMP;
+		auto EDGE = AC;
 
-		ACD = ABC;
-		ABC = ADB;
+		AC	 = AB;
+		AB	 = AD;
+		AD	 = EDGE;
+
+		ACD  = ABC;
+		ABC  = ADB;
 		
 		checkFace = TWO_FACE;
 	}
@@ -327,7 +338,7 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 				B = A;
 				gmtl::cross(dir, AC, AO);
 				gmtl::cross(dir, dir, AC);
-				simplexCount = 2;
+				simplexArray.m_Count = 2;
 				return false;
 			}
 		}
@@ -349,7 +360,7 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 				B = A;
 				gmtl::cross(dir, AB, AO);
 				gmtl::cross(dir, dir, AB);
-				simplexCount = 2;
+				simplexArray.m_Count = 2;
 				return false;
 			}
 
@@ -363,7 +374,7 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 
 			dir = ABC;
 
-			simplexCount = 3;
+			simplexArray.m_Count = 3;
 			return false;
 		}
 		
@@ -408,20 +419,20 @@ bool	Collider::Pyramid(std::array<gmtl::Vec3f, 4>& simplexPoints, gmtl::Vec3f& d
 	return false;
 }
 
-Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::SharedPtr setB, const std::array<gmtl::Vec3f, 4>& simplexPoints)
+Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::SharedPtr setB, const SimplexArray& simplexPoints)
 {
 	//==================================================
 	// EPA 알고리즘을 통해 충돌 정보를 계산합니다. 
 	// Ref : https://www.youtube.com/watch?v=6rgiPrzqt9w
 	//		 http://hacktank.net/blog/?p=119
 	//==================================================ㅍ
-	const auto& A = simplexPoints[0];
-	const auto& B = simplexPoints[1];
-	const auto& C = simplexPoints[2];
-	const auto& D = simplexPoints[3];
+	const auto& A = simplexPoints.m_Simplex[0];
+	const auto& B = simplexPoints.m_Simplex[1];
+	const auto& C = simplexPoints.m_Simplex[2];
+	const auto& D = simplexPoints.m_Simplex[3];
 
-	gmtl::Vec3f BC = C - B;
-	gmtl::Vec3f BD = D - B;
+	gmtl::Vec3f BC = C.m_Point - B.m_Point;
+	gmtl::Vec3f BD = D.m_Point - B.m_Point;
 	gmtl::Vec3f BCDNormal;
 	gmtl::cross(BCDNormal, BC, BD);
 
@@ -434,34 +445,38 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 	//===================================================
 	struct FaceData
 	{
-		std::array<gmtl::Vec3f, 3>	Points;
-		gmtl::Vec3f					Normal;
+		std::array<Simplex, 3>		Simplexes;
+		gmtl::Vec3f					Normal;		
 		float						Distance = 0.f;
 
 		FaceData() = default;
-		FaceData(gmtl::Vec3f simplexA, gmtl::Vec3f simplexB, gmtl::Vec3f simplexC)
+		FaceData(Simplex simplexA, Simplex simplexB, Simplex simplexC)
 		{
 			//============================================
 			// Normal = AB X AC
 			//============================================
-			Points[0] = simplexA;
-			Points[1] = simplexB;
-			Points[2] = simplexC;
+			Simplexes[0] = simplexA;
+			Simplexes[1] = simplexB;
+			Simplexes[2] = simplexC;
 
-			gmtl::Vec3f AB = simplexB - simplexA;
-			gmtl::Vec3f AC = simplexC - simplexA;
+			gmtl::Vec3f AB = simplexB.m_Point - simplexA.m_Point;
+			gmtl::Vec3f AC = simplexC.m_Point - simplexA.m_Point;
 			gmtl::cross(Normal, AB, AC);
 			gmtl::normalize(Normal);
 
-			Distance = gmtl::dot(Normal, simplexA);
+			Distance = std::fabsf(gmtl::dot(Normal, simplexA.m_Point));
 
 		}
 	};
+
+	//===================================================
+	// 가장 원점과 가까운 면의 정보를 담기위한 구조체입니다. 
+	//===================================================
 	std::array<FaceData, EPA_MAX_NUM_FACES> arrayFaces;
 	Int32 numFaces = 4;
 
 	//============================
-	// GJK와 공식과 안맞을 수 있다.
+	// GJK에서 넘겨준 Pyramid 정보
 	//============================
 	auto& ABC = arrayFaces[0];
 	auto& ACD = arrayFaces[1];
@@ -473,45 +488,45 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 	ADB = FaceData(A, D, B);
 	BDC = FaceData(B, D, C);
 
+	//============================================================
+	// 충돌 포인트를 계산하기 위한 람다식.
+	//============================================================
+	auto FuncCalculateContactPoint = [&setA, &setB](const FaceData& face)->gmtl::Vec3f
+	{
+		//========================================================
+		// 1. Normal 값과 일치하는 충돌면을 찾는다.  
+		// 2. -Normal 값으로 상대 충돌체의 FurthestPoint를 찾는다. 
+		// 3. FurthestPoint = 충돌포인트   ... ?? ???  FurthestPoint + Normal * Depth = 충돌포인트 로 해야 할까 ???? 
+		// 4. 맞는지 사실 검증이 안되어 있다.... 일단 해보자... 
+		//========================================================
+		gmtl::Vec3f faceA[] = { face.Simplexes[0].m_OriginPoint[0], face.Simplexes[1].m_OriginPoint[0], face.Simplexes[2].m_OriginPoint[0] };
+		gmtl::Vec3f faceB[] = { face.Simplexes[0].m_OriginPoint[1], face.Simplexes[1].m_OriginPoint[1], face.Simplexes[2].m_OriginPoint[1] };
+		
+		gmtl::Vec4f planeA = gmtl::CalculateEquationPlane(faceA[0], faceA[1], faceA[2]);
+		gmtl::Vec4f planeB = gmtl::CalculateEquationPlane(faceB[0], faceB[1], faceB[2]);
+		
+		gmtl::Vec3f normalA(planeA[0], planeA[1], planeA[2]); gmtl::normalize(normalA);
+		gmtl::Vec3f normalB(planeB[0], planeB[1], planeB[2]); gmtl::normalize(normalB);
+
+
+		gmtl::Vec3f CollisionPoint;
+		if (std::fabsf(gmtl::dot(normalA, face.Normal) - 1.f) <= FLOAT_TOLERANCE)
+		{
+			int a = 0;
+			//CollisionPoint = (-face.Normal * face.Distance) - face.Simplexes[0].m_Point + face.Simplexes[0].m_OriginPoint[0];
+		}
+		else if (std::fabsf(gmtl::dot(normalB, face.Normal) - 1.f) <= FLOAT_TOLERANCE)
+		{
+			int a = 0;
+			//CollisionPoint = (-face.Normal * face.Distance) - face.Simplexes[0].m_Point + face.Simplexes[0].m_OriginPoint[1];
+		}
+		else																			return gmtl::Vec3f(); //ERROR
+		
+		return CollisionPoint;
+	};
+
 	
-	//===================================================
-	// A가 BCD 평면의 어느 위치에 있는지 체크합니다. 
-	//===================================================
-	//auto location = gmtl::PointLocationByPlane(simplexPoints[3], BCDNormal, simplexPoints[2]);
-	//if (0.f < location)
-	//{
-	//	//===============================================
-	//	// A가 BCD 평면 방향에 위치.
-	//	//  - [ABC, ACD, ADB, BDC]
-	//	//===============================================
-	//	arrayFaces[0] = (FaceData(simplexPoints[3], simplexPoints[2], simplexPoints[1]));
-	//	arrayFaces[1] = (FaceData(simplexPoints[3], simplexPoints[1], simplexPoints[0]));
-	//	arrayFaces[2] = (FaceData(simplexPoints[3], simplexPoints[0], simplexPoints[2]));
-	//	arrayFaces[3] = (FaceData(simplexPoints[2], simplexPoints[0], simplexPoints[1]));
-	//}
-	//else if (location < 0.f)
-	//{
-	//	//===============================================
-	//	// A가 BCD 평면 반대 방향에 위치.
-	//	//  - [ACB, ADC, ABD, BCD]
-	//	//===============================================
-	//	arrayFaces[0] = (FaceData(simplexPoints[3], simplexPoints[1], simplexPoints[2]));
-	//	arrayFaces[1] = (FaceData(simplexPoints[3], simplexPoints[0], simplexPoints[1]));
-	//	arrayFaces[2] = (FaceData(simplexPoints[3], simplexPoints[2], simplexPoints[0]));
-	//	arrayFaces[3] = (FaceData(simplexPoints[2], simplexPoints[1], simplexPoints[0]));
-	//}
-	//else
-	//{
-	//	//===============================================
-	//	// location == 0.f
-	//	// A가 BCD 평면 위에 위치한다... 이렇게 되면 3D가
-	//	// 아니라 2D 평면이 되어버렸다. 일단 막아두자. 
-	//	//===============================================
-	//	return Contact();
-	//}
-
-
-	auto& closestFace = arrayFaces.front();
+	FaceData closestFace = arrayFaces.front();
 	for(int iteration = 0; iteration < EPA_MAX_ITER_NUM; ++iteration)
 	{
 		//===============================================
@@ -519,29 +534,29 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 		//===============================================		
 		for (Int32 faceIdx = 0; faceIdx < numFaces && faceIdx < arrayFaces.size(); ++faceIdx)
 		{
-			if (arrayFaces[faceIdx].Distance < closestFace.Distance)
+			if (faceIdx == 0 || arrayFaces[faceIdx].Distance < closestFace.Distance)
 				closestFace = arrayFaces[faceIdx];
 		}
 		
-		auto point = GetFurthestPoint(setA, setB, closestFace.Normal);
+		auto point = GetSupportPoint(setA, setB, closestFace.Normal);
 
 		//===============================================
 		// 새로 얻은 점이 기존의 점과 거의 차이가 나지 않는다.
 		//===============================================
-		if (gmtl::dot(point, closestFace.Normal) - closestFace.Distance < EPA_TOLERANCE)
+		if (gmtl::Math::abs(gmtl::dot(point.m_Point, closestFace.Normal) - closestFace.Distance) < FLOAT_TOLERANCE)
 		{
 			//===============================================
 			// 충돌정보를 반환한다. 
 			//===============================================
 
 			// TODO : 충돌정보 넣어주자 
-			return Contact::CreateContact(closestFace.Points[0], closestFace.Normal, closestFace.Distance);
+			return Contact::CreateContact(FuncCalculateContactPoint(closestFace), closestFace.Normal, closestFace.Distance);
 		}
 
 
 
 
-		std::array<std::tuple<gmtl::Vec3f,gmtl::Vec3f>, EPA_MAX_NUM_LOOSE_EDGES>	looseEdges;
+		std::array<std::tuple<Simplex, Simplex>, EPA_MAX_NUM_LOOSE_EDGES>	looseEdges;
 		Int32 numLooseEdges = 0;
 
 		
@@ -555,12 +570,12 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 			//===============================================
 			// 추가된 점을 바라보는 평면들을 제거합니다.  
 			//===============================================	
-			if (gmtl::dot(face.Normal, point - face.Points[0]) > 0)
+			if (gmtl::dot(face.Normal, point.m_Point - face.Simplexes[0].m_Point) > 0)
 			{
-				size_t pointCount = face.Points.size();
+				size_t pointCount = face.Simplexes.size();
 				for (size_t k = 0; k < pointCount; ++k)
 				{
-					auto currentEdge	= std::make_tuple(face.Points[k], face.Points[(k + 1) % pointCount]);
+					auto currentEdge	= std::make_tuple(face.Simplexes[k], face.Simplexes[(k + 1) % pointCount]);
 
 					auto rangeS = looseEdges.begin();
 					auto rangeE = looseEdges.begin() + numLooseEdges;
@@ -613,9 +628,9 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 			// 평면이 원점을 포함하는 경우가 아닌 이상 음수가 나올수 있을까??? 
 			// EPA_TOLERANCE : 평면이 원점을 표함할 경우에 대한 예외처리를 위한 허용오차 값.
 			//======================================================================	
-			if (gmtl::dot(face.Points[0], face.Normal) + EPA_TOLERANCE < 0.f)
+			if (gmtl::dot(face.Simplexes[0].m_Point, face.Normal) + FLOAT_TOLERANCE < 0.f)
 			{
-				std::swap(face.Points[0], face.Points[1]);
+				std::swap(face.Simplexes[0].m_Point, face.Simplexes[1].m_Point);
 				face.Normal = -face.Normal;
 			}
 
@@ -624,5 +639,5 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 	}
 
 	// TODO : 충돌정보 넣어주자 
-	return Contact::CreateContact(closestFace.Points[0], closestFace.Normal, closestFace.Distance);
+	return Contact::CreateContact(FuncCalculateContactPoint(closestFace), closestFace.Normal, closestFace.Distance);
 }

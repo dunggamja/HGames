@@ -1,19 +1,32 @@
 #pragma once
 
-class AABBBoxCollider : public Collider
+class AABBCollider : public Collider
 {
-	SHARED_TYPEDEF(AABBBoxCollider)
+	SHARED_TYPEDEF(AABBCollider)
 
 public:
-	AABBBoxCollider(gmtl::Vec3f centerPosition, gmtl::Vec3f size);
+	AABBCollider(gmtl::Vec3f position, gmtl::Vec3f size);
 public:
 	virtual gmtl::Vec3f	GetFurthestPoint(gmtl::Vec3f dir) const override;
+	virtual	void		UpdateCollider(gmtl::Matrix44f& transform) override {}
 
 protected:
-	void	InitializePoints();
+	gmtl::Vec3f			m_Position;
+	gmtl::Vec3f			m_Size;
+};
 
+class OBBCollider : public Collider
+{
+	SHARED_TYPEDEF(OBBCollider)
+
+public:
+	OBBCollider(gmtl::Vec3f position, gmtl::Quatf rotation, gmtl::Vec3f size);
+public:
+	virtual gmtl::Vec3f	GetFurthestPoint(gmtl::Vec3f dir) const override;
+	virtual	void		UpdateCollider(gmtl::Matrix44f& transform) override;
 protected:
-	gmtl::Vec3f						m_CenterPosition;
-	gmtl::Vec3f						m_Size;
-	std::array<gmtl::Vec3f, 8>		m_Points;
+	gmtl::Matrix44f		m_Transform;
+	gmtl::Vec3f			m_Position;
+	gmtl::Quatf			m_Rotation;
+	gmtl::Vec3f			m_Size;
 };

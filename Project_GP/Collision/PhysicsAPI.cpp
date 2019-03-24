@@ -3,24 +3,25 @@
 #ifdef DEBUG_TEST
 int main()
 {
-	gmtl::Vec3f centerA(0.f, 0.f, 0.f);
-	gmtl::Vec3f sizeA(1.f, 1.f, 1.f);
-	auto boxA = std::make_shared<AABBBoxCollider>(centerA, sizeA);
+	///*gmtl::setRot(rotB, gmtl::AxisAnglef(gmtl::Math::PI , gmtl::Vec3f(0.f, 0.f, 1.f)));*/
+	gmtl::Quatf rotA, rotB;
+	
+	rotA = gmtl::QUAT_IDENTITYF;
+	rotB = gmtl::QUAT_IDENTITYF;
+	gmtl::setRot(rotA, gmtl::AxisAnglef(gmtl::Math::PI, gmtl::Vec3f(0.f, 0.f, 1.f)));
+	gmtl::setRot(rotB, gmtl::AxisAnglef(gmtl::Math::PI, gmtl::Vec3f(0.f, 0.f, 1.f)));
+	gmtl::setRot(rotB, gmtl::EulerAngleXYZf(60.f, 30.f, 120.f));
+	
+	auto obbA = std::make_shared<OBBCollider>(gmtl::Vec3f(0.f, 0.f, 0.f), rotA, gmtl::Vec3f(1.f, 1.f, 1.f));
+	auto obbB = std::make_shared<OBBCollider>(gmtl::Vec3f(0.f, 0.8f, 0.f), rotB, gmtl::Vec3f(1.f, 1.f, 1.f));
 
-	gmtl::Vec3f centerB(0.0f, 0.1f, 0.f);
-	gmtl::Vec3f sizeB(1.f, 1.f, 1.f);
-	auto boxB = std::make_shared<AABBBoxCollider>(centerB, sizeB);
+	auto GJKValue = Collider::CheckGJK(obbA, obbB);
 
-	bool isCollisioned = false;
-	std::array<gmtl::Vec3f, 4> simplexPoints;
-	std::tie(isCollisioned, simplexPoints) = Collider::CheckGJK(boxA, boxB);
-
-	if (isCollisioned)
+	if (std::get<0>(GJKValue))
 	{
-		auto contactInfo = Collider::CheckEPA(boxA, boxB, simplexPoints);
+		auto EPAValue = Collider::CheckEPA(obbA, obbB, std::get<1>(GJKValue));
 		int a = 0;
 	}
-	
 
 	return 0;
 }

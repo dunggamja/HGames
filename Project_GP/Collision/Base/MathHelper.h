@@ -47,7 +47,7 @@ namespace gmtl
 		return gmtl::dot(dir, planeDir);
 	}
 
-	//========================================
+	//==========================================
 	// 평면의 방정식을 계산합니다
 	//==========================================
 	template<typename T>
@@ -77,5 +77,29 @@ namespace gmtl
 		D = -(x1 * (y2 * z3 - y3 * z2) + x2 * (y3 * z1 - y1 * z3) + x3 * (y1 * z2 - y2 * z1));
 
 		return plane;
+	}
+
+
+	//==============================================================
+	// 평면위의 무게 중심을 구합니다. 
+	// Code from Christer Ericson's Real-Time Collision Detection
+	// Compute barycentric coordinates (u, v, w) for
+	// point p with respect to triangle (a, b, c)
+	//==============================================================
+	template<typename T>
+	std::tuple<float, float, float>	BarycentricProjection(const Vec<T, 3>& point, const Vec<T, 3>& A, const Vec<T, 3>& B, const Vec<T, 3>& C)
+	{
+		Vec<T, 3> v0 = B - A, v1 = C - A, v2 = point - A;
+		float d00 = gmtl::dot(v0, v0);
+		float d01 = gmtl::dot(v0, v1);
+		float d11 = gmtl::dot(v1, v1);
+		float d20 = gmtl::dot(v2, v0);
+		float d21 = gmtl::dot(v2, v1);
+		float denom = d00 * d11 - d01 * d01;
+		float v = (d11 * d20 - d01 * d21) / denom;
+		float w = (d00 * d21 - d01 * d20) / denom;
+		float u = 1.0f - v - w;
+
+		return std::make_tuple(u, v, w);
 	}
 };

@@ -4,7 +4,7 @@
 int main()
 {
 	///*gmtl::setRot(rotB, gmtl::AxisAnglef(gmtl::Math::PI , gmtl::Vec3f(0.f, 0.f, 1.f)));*/
-	gmtl::Quatf rotA, rotB;
+	/*gmtl::Quatf rotA, rotB;
 	
 	rotA = gmtl::QUAT_IDENTITYF;
 	rotB = gmtl::QUAT_IDENTITYF;
@@ -14,6 +14,11 @@ int main()
 	
 	auto obbA = std::make_shared<OBBCollider>(gmtl::Vec3f(0.f, 0.f, 0.f), rotA, gmtl::Vec3f(1.f, 1.f, 1.f));
 	auto obbB = std::make_shared<OBBCollider>(gmtl::Vec3f(0.f, 0.8f, 0.f), rotB, gmtl::Vec3f(1.f, 1.f, 1.f));
+
+	auto GJKValue = Collider::CheckGJK(obbA, obbB);*/
+
+	auto obbA = std::make_shared<AABBCollider>(gmtl::Vec3f(0.f, 0.f, 0.f), gmtl::Vec3f(1.f, 1.f, 1.f));
+	auto obbB = std::make_shared<AABBCollider>(gmtl::Vec3f(1.f, 1.f, 0.f), gmtl::Vec3f(1.f, 1.f, 1.f));
 
 	auto GJKValue = Collider::CheckGJK(obbA, obbB);
 

@@ -493,36 +493,28 @@ Contact	Collider::CheckEPA(const Collider::SharedPtr setA, const Collider::Share
 	//============================================================
 	auto FuncCalculateContactPoint = [&setA, &setB](const FaceData& face)->gmtl::Vec3f
 	{
-		//========================================================
-		// 1. Normal 값과 일치하는 충돌면을 찾는다.  
-		// 2. -Normal 값으로 상대 충돌체의 FurthestPoint를 찾는다. 
-		// 3. FurthestPoint = 충돌포인트   ... ?? ???  FurthestPoint + Normal * Depth = 충돌포인트 로 해야 할까 ???? 
-		// 4. 맞는지 사실 검증이 안되어 있다.... 일단 해보자... 
-		//========================================================
-		gmtl::Vec3f faceA[] = { face.Simplexes[0].m_OriginPoint[0], face.Simplexes[1].m_OriginPoint[0], face.Simplexes[2].m_OriginPoint[0] };
-		gmtl::Vec3f faceB[] = { face.Simplexes[0].m_OriginPoint[1], face.Simplexes[1].m_OriginPoint[1], face.Simplexes[2].m_OriginPoint[1] };
-		
-		gmtl::Vec4f planeA = gmtl::CalculateEquationPlane(faceA[0], faceA[1], faceA[2]);
-		gmtl::Vec4f planeB = gmtl::CalculateEquationPlane(faceB[0], faceB[1], faceB[2]);
-		
-		gmtl::Vec3f normalA(planeA[0], planeA[1], planeA[2]); gmtl::normalize(normalA);
-		gmtl::Vec3f normalB(planeB[0], planeB[1], planeB[2]); gmtl::normalize(normalB);
+		//////========================================================
+		////// 1. Normal 값과 일치하는 충돌면을 찾는다.  
+		////// 2. -Normal 값으로 상대 충돌체의 FurthestPoint를 찾는다. 
+		////// 3. FurthestPoint = 충돌포인트   ... ?? ???  FurthestPoint + Normal * Depth = 충돌포인트 로 해야 할까 ???? 
+		////// 4. 맞는지 사실 검증이 안되어 있다.... 일단 해보자... 
+		//////========================================================
 
+		//==================================================================================
+		// Convex Combination 
+		// REF : http://www.dyn4j.org/2010/04/gjk-distance-closest-points/#gjk-top
+	    //       https://ko.wikipedia.org/wiki/%EB%B3%BC%EB%A1%9D_%EC%A1%B0%ED%95%A9
+		//==================================================================================
 
-		gmtl::Vec3f CollisionPoint;
-		if (std::fabsf(gmtl::dot(normalA, face.Normal) - 1.f) <= FLOAT_TOLERANCE)
-		{
-			int a = 0;
-			//CollisionPoint = (-face.Normal * face.Distance) - face.Simplexes[0].m_Point + face.Simplexes[0].m_OriginPoint[0];
-		}
-		else if (std::fabsf(gmtl::dot(normalB, face.Normal) - 1.f) <= FLOAT_TOLERANCE)
-		{
-			int a = 0;
-			//CollisionPoint = (-face.Normal * face.Distance) - face.Simplexes[0].m_Point + face.Simplexes[0].m_OriginPoint[1];
-		}
-		else																			return gmtl::Vec3f(); //ERROR
+		gmtl::Vec3f baryCentricPoint = face.Normal * face.Distance;
+		auto baryCentricUVW = gmtl::BarycentricProjection(baryCentricPoint, face.Simplexes[0].m_Point, face.Simplexes[1].m_Point, face.Simplexes[2].m_Point);
+
 		
-		return CollisionPoint;
+		gmtl::Vec3f OriginA = face.Simplexes[0].m_OriginPoint[0];
+		gmtl::Vec3f OriginB = face.Simplexes[1].m_OriginPoint[0];
+		gmtl::Vec3f OriginC = face.Simplexes[2].m_OriginPoint[0];
+
+		return OriginA * std::get<0>(baryCentricUVW) + OriginB * std::get<1>(baryCentricUVW) + OriginC * std::get<2>(baryCentricUVW);
 	};
 
 	

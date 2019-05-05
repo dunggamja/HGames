@@ -54,7 +54,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -66,7 +66,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -96,7 +96,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)\Build\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\Build\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -122,6 +127,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);D:\boost_1_68_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PhysicsAPI.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Test|x64'">
@@ -134,6 +140,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PhysicsAPI.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>DEBUG_TEST;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -161,16 +168,22 @@
       <AdditionalIncludeDirectories>$(ProjectDir);D:\boost_1_68_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PhysicsAPI.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y "$(TargetDir)\*.lib" "$(SolutionDir)\..\Client_IR\ThirdParty\Collision\bin_x64\"
+xcopy "*.h" "$(SolutionDir)\..\Client_IR\ThirdParty\Collision\include\" /e /h /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Base\BaseObject.h" />
     <ClInclude Include="Base\Const.h" />
     <ClInclude Include="Base\Define.h" />
+    <ClInclude Include="Base\Enums.h" />
     <ClInclude Include="Base\MathHelper.h" />
     <ClInclude Include="Base\PreCompiler.h" />
     <ClInclude Include="Base\Singleton.h" />
@@ -230,9 +243,11 @@
     <ClInclude Include="Physics\Collide\Collider.h" />
     <ClInclude Include="Physics\Contact\Contact.h" />
     <ClInclude Include="Physics\Contact\ContactResolver.h" />
+    <ClInclude Include="Physics\Contact\Grid.h" />
+    <ClInclude Include="Physics\Contact\GJK.h" />
+    <ClInclude Include="Physics\Contact\RDC.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Physics\Rigidbody\Rigidbody.h" />
-    <ClInclude Include="Physics\Space\Grid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsAPI.cpp">
@@ -244,9 +259,11 @@
     <ClCompile Include="Physics\Collide\Collider.cpp" />
     <ClCompile Include="Physics\Contact\Contact.cpp" />
     <ClCompile Include="Physics\Contact\ContactResolver.cpp" />
+    <ClCompile Include="Physics\Contact\Grid.cpp" />
+    <ClCompile Include="Physics\Contact\GJK.cpp" />
+    <ClCompile Include="Physics\Contact\RDC.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Physics\Rigidbody\Rigidbody.cpp" />
-    <ClCompile Include="Physics\Space\Grid.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,6 @@
 #include "PhysicsAPI.h"
 
+using namespace Physics;
 
 void PhysicsManager::Update(float timeDelta)
 {
@@ -27,22 +28,48 @@ void PhysicsManager::Update(float timeDelta)
 void PhysicsManager::GenerateContacts()
 {
 	//=======================================
-	// 충돌처리 (Broad Phase)
+	// 이전에 생성된 충돌정보는 날립니다. 
 	//=======================================
-	
-	/*
-	Broad Phase 
-	어떻게 나눌것인가. 
-	어떻게 관리할 것인가에 대한 정보는 Physicsmanager에서 들고 있는 것이 일단 가장 편할 것이다. 
-	*/
+	m_Contacts.clear();
 
 	//=======================================
-	// 충돌처리 (Narrow Phase)
+	// 충돌 생성 (Broad Phase)
 	//=======================================
+	
+	//=======================================
+	// 모든 객체의 충돌정보를 재생성
+	//=======================================
+	m_Grid->ClearColliders();
+
+	for (auto& spRigidBody : m_RigidBodies)
+	{
+		if (auto spCollider = spRigidBody->GetCollider())
+		{
+			if (spCollider->IsSleep()) continue;
+			m_Grid->AddCollider(spRigidBody->GetCollider());
+		}
+	}
+
+	
+
+	//=======================================
+	// 충돌 생성 (Narrow Phase)
+	//=======================================
+	m_Contacts = m_Grid->GenerateContacts();
 }
 
 
 void PhysicsManager::ResolveContacts(float timeDelta)
 {
+	//=======================================
+	// 충돌로 인해 생성된 힘 적용
+	//=======================================
 
+	//=======================================
+	// 접촉으로 인한 우치 변화량 적용
+	//=======================================
+
+	//=======================================
+	// 접촉으로 인한 속도 변화량 적용
+	//=======================================
 }

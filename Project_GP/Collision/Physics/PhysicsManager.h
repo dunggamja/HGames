@@ -1,15 +1,42 @@
 #pragma once
 
-class PhysicsManager : public Singleton<PhysicsManager>
+
+
+namespace Physics
 {
-private:
-	std::vector<Rigidbody::SharedPtr>	m_RigidBodies;
-	std::vector<Contact::SharedPtr>		m_Contacts;
+	
+	class PhysicsManager : public Singleton<PhysicsManager>
+	{
+	private:
+		std::vector<Rigidbody::SharedPtr>	m_RigidBodies;
+		std::list<Contact::SharedPtr>		m_Contacts;\
 
-public:
-	void Update(float timeDelta);
 
-private:
-	void GenerateContacts();
-	void ResolveContacts(float timeDelta);
-};
+	private:
+		PhysicsManager()
+		{
+			m_Grid		= std::make_shared<Grid<GRID_AXIS_NUM>>();
+			m_Resolver	= std::make_shared<ContactResolver>();
+		}
+
+
+	private:
+		//===================================================
+		// Contact Generator 
+		//===================================================
+		Grid<GRID_AXIS_NUM>::SharedPtr		m_Grid;
+
+		//===================================================
+		// Contact Resolver
+		//===================================================
+		ContactResolver::SharedPtr			m_Resolver;
+
+
+	public:
+		void Update(float timeDelta);
+
+	private:
+		void GenerateContacts();
+		void ResolveContacts(float timeDelta);
+	};
+}

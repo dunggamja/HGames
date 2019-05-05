@@ -32,7 +32,7 @@ namespace gmtl
 			result += planeDir[i] * (point[i] - planePoint[i]);
 		}
 
-		return std::fabsf(result) <= F_EPSILON;
+		return std::fabsf(result) <= Physics::F_EPSILON;
 	}
 
 

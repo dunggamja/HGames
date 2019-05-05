@@ -23,6 +23,8 @@
 #include <ppl.h>
 #include <cmath>
 #include <limits>
+#include <functional>
+#include <numeric>
 
 //========================================================================
 // Math Lib - GMTL (Graphics Math Template Library)
@@ -37,6 +39,7 @@
 //========================================================================
 #include "Base/Define.h"
 #include "Base/Const.h"
+#include "Base/Enums.h"
 #include "Base/Singleton.h"
 #include "Base/MathHelper.h"
 #include "Base/PreCompiler.h"
@@ -51,7 +54,26 @@
 #include "Physics/Collide/BoxCollider.h"
 #include "Physics/Rigidbody/Rigidbody.h"
 #include "Physics/Contact/Contact.h"
+
+
+//========================================================================
+// BROAD CONTACT GENERATOR
+//========================================================================
+#include "Physics/Contact/RDC.h"
+#include "Physics/Contact/Grid.h"
+
+//========================================================================
+// NARROW CONTACT GENERATOR
+//========================================================================
+#include "Physics/Contact/GJK.h"
+
+//========================================================================
+// CONTACT RESOLVER
+//========================================================================
 #include "Physics/Contact/ContactResolver.h"
-#include "Physics/Space/Grid.h"
+
+//========================================================================
+// PHYSICS MANAGER
+//========================================================================
 #include "Physics/PhysicsManager.h"
 

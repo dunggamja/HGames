@@ -1,0 +1,1 @@
+xcopy "*.h" "..\Client_IR\ThirdParty\Collision\include\" /e /h /y

@@ -40,7 +40,7 @@ namespace Math
     *  @{
     */
    const float TWO_PI = 6.28318530717958647692f;
-   const float PI = 3.14159265358979323846f; //3.14159265358979323846264338327950288419716939937510;
+   const float PI_ONE = 3.14159265358979323846f; //3.14159265358979323846264338327950288419716939937510;
    const float PI_OVER_2 = 1.57079632679489661923f;
    const float PI_OVER_4 = 0.78539816339744830962f;
    /** @} */
@@ -153,7 +153,7 @@ inline float aCos( float fValue )
     }
     else
     {
-        return static_cast<float>(gmtl::Math::PI);
+        return static_cast<float>(gmtl::Math::PI_ONE);
     }
 }
 inline double aCos( double fValue )
@@ -167,7 +167,7 @@ inline double aCos( double fValue )
     }
     else
     {
-        return static_cast<double>(gmtl::Math::PI);
+        return static_cast<double>(gmtl::Math::PI_ONE);
     }
 }
 //----------------------------------------------------------------------------
@@ -463,20 +463,20 @@ float SymmetricRandom ()
 
 inline float deg2Rad( float fVal )
 {
-   return static_cast<float>(fVal * static_cast<float>(gmtl::Math::PI / 180.0));
+   return static_cast<float>(fVal * static_cast<float>(gmtl::Math::PI_ONE / 180.0));
 }
 inline double deg2Rad( double fVal )
 {
-   return static_cast<double>(fVal * static_cast<double>(gmtl::Math::PI / 180.0));
+   return static_cast<double>(fVal * static_cast<double>(gmtl::Math::PI_ONE / 180.0));
 }
 
 inline float rad2Deg( float fVal )
 {
-   return static_cast<float>(fVal * static_cast<float>(180.0 / gmtl::Math::PI));
+   return static_cast<float>(fVal * static_cast<float>(180.0 / gmtl::Math::PI_ONE));
 }
 inline double rad2Deg( double fVal )
 {
-   return static_cast<float>(fVal * static_cast<double>(180.0 / gmtl::Math::PI));
+   return static_cast<float>(fVal * static_cast<double>(180.0 / gmtl::Math::PI_ONE));
 }
 //----------------------------------------------------------------------------
 

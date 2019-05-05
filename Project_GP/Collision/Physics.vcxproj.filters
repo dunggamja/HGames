@@ -16,23 +16,23 @@
     <Filter Include="Base">
       <UniqueIdentifier>{b7b5aabe-f558-4b7a-a243-59f072cbff6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Physics\Contact\Detector">
-      <UniqueIdentifier>{0cde10d0-2897-44ee-ae9b-e818289c4b42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Physics\Contact\Detector\Broad">
-      <UniqueIdentifier>{a673e095-cbec-43a9-875f-5bd7d426622f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Physics\Contact\Detector\Narrow">
-      <UniqueIdentifier>{b47bb5ee-3f08-4a96-996d-7da8ac8f648a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics\Container">
       <UniqueIdentifier>{59e8b14d-5ec8-4eb0-b89d-c414afc3a228}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Physics\Space">
-      <UniqueIdentifier>{9538235f-aafb-4bca-9e8c-33e98e2bfc55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics\Collide">
       <UniqueIdentifier>{7b7c75fd-a1a9-411c-ac0a-1df6a2f93d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Generator">
+      <UniqueIdentifier>{0cde10d0-2897-44ee-ae9b-e818289c4b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Generator\Broad">
+      <UniqueIdentifier>{a673e095-cbec-43a9-875f-5bd7d426622f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Generator\Narrow">
+      <UniqueIdentifier>{b47bb5ee-3f08-4a96-996d-7da8ac8f648a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Contact\Resolver">
+      <UniqueIdentifier>{69ea3edd-ac20-490b-9cba-a94ab4899cf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -208,14 +208,8 @@
     <ClInclude Include="Base\MathHelper.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\Contact\ContactResolver.h">
-      <Filter>Physics\Contact</Filter>
-    </ClInclude>
     <ClInclude Include="Base\BaseObject.h">
       <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Space\Grid.h">
-      <Filter>Physics\Space</Filter>
     </ClInclude>
     <ClInclude Include="Base\PreCompiler.h">
       <Filter>Base</Filter>
@@ -229,6 +223,21 @@
     <ClInclude Include="Physics\Collide\BoxCollider.h">
       <Filter>Physics\Collide</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Contact\RDC.h">
+      <Filter>Physics\Contact\Generator\Broad</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Enums.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Contact\ContactResolver.h">
+      <Filter>Physics\Contact\Resolver</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Contact\Grid.h">
+      <Filter>Physics\Contact\Generator\Broad</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Contact\GJK.h">
+      <Filter>Physics\Contact\Generator\Narrow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsAPI.cpp" />
@@ -241,17 +250,23 @@
     <ClCompile Include="Physics\Contact\Contact.cpp">
       <Filter>Physics\Contact</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\Contact\ContactResolver.cpp">
-      <Filter>Physics\Contact</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\Space\Grid.cpp">
-      <Filter>Physics\Space</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\Collide\Collider.cpp">
       <Filter>Physics\Collide</Filter>
     </ClCompile>
     <ClCompile Include="Physics\Collide\BoxCollider.cpp">
       <Filter>Physics\Collide</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\RDC.cpp">
+      <Filter>Physics\Contact\Generator\Broad</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\ContactResolver.cpp">
+      <Filter>Physics\Contact\Resolver</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\Grid.cpp">
+      <Filter>Physics\Contact\Generator\Broad</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Contact\GJK.cpp">
+      <Filter>Physics\Contact\Generator\Narrow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
